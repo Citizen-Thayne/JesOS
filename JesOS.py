@@ -13,7 +13,8 @@ def parse_jes_output(spool):
         ('Open Error - DDNAME: {}',                                          '(?<=OPEN ERROR - DDNAME )(\S){3,}'),
         ('DGP1 not available (trying to connect to prod db',                 'DGP1 NOT AVAILABLE'),
         ('SQLCODE -206 (probably forgot \':\' in sql query) {}',             '(?<=DSN2 BIND SQL ERROR)[\s\S]*(?<=SQLCODE=-206)[\s\S]*TOKENS=(\S*)'),
-        ('Invalid comparison of {} to {}','"(.*)" was compared with "(.*)"')
+        ('Invalid comparison of {} to {}',                                   '"(.*)" was compared with "(.*)"'),
+        ('{} was used in a arithmetic statement but is {}',                  '"(\S+) \((\S+)\)" was not numeric, but was a sender in an arithmetic expression')
         ]
 
     for message, regex in error_regex:
