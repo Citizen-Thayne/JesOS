@@ -5,27 +5,26 @@ def parse_jes_output(spool):
     output_message = ''
            
     error_regex = [
-        ('Data sets not found:',                                             '(?<=DATA SET )(.*)(?= NOT FOUND)'),
-        ('Wrong permissions (Probably looking at prod when should be test)', '(?<=DATA SET: )(.*)(?= WITH RETURN CODE 08)'),
-        ('Missimng DD Statement:',                                           '(\S*)(?= DD STATEMENT MISSING)'),
-        ('The following symbols were not used: ',                            '(?<=THE SYMBOL )(.*)(?= WAS NOT USED)'),
-        ('Undefined or unusable host variable',                              '(?<=UNDEFINED OR UNUSABLE HOST VARIABLE ")(.*)"'),
-        ('Open Error - DDNAME:',                                             '(?<=OPEN ERROR - DDNAME )(\S*)'),
+        ('Data set {} not found:',                                           '(?<=DATA SET )(.*)(?= NOT FOUND)'),
+        ('Wrong permissions on data set {}',                                 '(?<=DATA SET: )(.*)(?= WITH RETURN CODE 08)'),
+        ('Missimng DD Statement for {}',                                     '(\S*)(?= DD STATEMENT MISSING)'),
+        ('Symbol not used: {} ',                                             '(?<=THE SYMBOL )(.*)(?= WAS NOT USED)'),
+        ('Undefined or unusable host variable: {}',                          '(?<=UNDEFINED OR UNUSABLE HOST VARIABLE ")(.*)"'),
+        ('Open Error - DDNAME: {}',                                          '(?<=OPEN ERROR - DDNAME )(\S){3,}'),
         ('DGP1 not available (trying to connect to prod db',                 'DGP1 NOT AVAILABLE'),
-        ('SQLCODE -206, probably forgot \':\' on sql quuery',                '(?<=DSN2 BIND SQL ERROR)[\s\S]*(?<=SQLCODE=-206)[\s\S]*TOKENS=(\S*)')
+        ('SQLCODE -206 (probably forgot \':\' in sql query) {}',             '(?<=DSN2 BIND SQL ERROR)[\s\S]*(?<=SQLCODE=-206)[\s\S]*TOKENS=(\S*)'),
+        ('Invalid comparison of {} to {}','"(.*)" was compared with "(.*)"')
         ]
 
     for message, regex in error_regex:
         found_errors = re.findall(regex, spool)
         found_errors = list(set(found_errors))
-        print(found_errors)
+        #print(found_errors)
         while(found_errors.count('')):
             found_errors.remove('')
         if len(found_errors) > 0:
-            output_message += message + '\n'
             for error in found_errors:
-                output_message += error + '\n'
-            output_message += '\n'
+                output_message += message.format(*error) + '\n'
     return output_message
 
 try:
