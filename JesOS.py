@@ -14,13 +14,14 @@ def parse_jes_output(spool):
         ('DGP1 not available (trying to connect to prod db',                 'DGP1 NOT AVAILABLE'),
         ('SQLCODE -206 (probably forgot \':\' in sql query) {}',             '(?<=DSN2 BIND SQL ERROR)[\s\S]*(?<=SQLCODE=-206)[\s\S]*TOKENS=(\S*)'),
         ('Invalid comparison of {} to {}',                                   '"(.*)" was compared with "(.*)"'),
-        ('{} was used in a arithmetic statement but is {}',                  '"(\S+) \((\S+)\)" was not numeric, but was a sender in an arithmetic expression')
+        ('{} was used in a arithmetic statement but is {}',                  '"(\S+) \((\S+)\)" was not numeric, but was a sender in an arithmetic expression'),
+        ('SQLCODE -811 (SELECT statement recieved more than one records)',    '\*\*SQL RETURN CODE =        -811'),
+        ('SQLCODE -991 (MOVE "UTLWKRRS" TO UTLWKSTG)',                       '\*\*SQL RETURN CODE =        -991')
         ]
 
     for message, regex in error_regex:
         found_errors = re.findall(regex, spool)
         found_errors = list(set(found_errors))
-        #print(found_errors)
         while(found_errors.count('')):
             found_errors.remove('')
         if len(found_errors) > 0:
