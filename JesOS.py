@@ -5,7 +5,7 @@ def parse_jes_output(spool):
     output_message = ''
            
     error_regex = [
-        ('Data set {} not found:',                                           '(?<=DATA SET )(.*)(?= NOT FOUND)'),
+        ('Data set {} not found:',                                           '(?<=DATA SET )(\S+)(?= NOT FOUND)'),
         ('Wrong permissions on data set {}',                                 '(?<=DATA SET: )(.*)(?= WITH RETURN CODE 08)'),
         ('Missimng DD Statement for {}',                                     '(\S*)(?= DD STATEMENT MISSING)'),
         ('Symbol not used: {} ',                                             '(?<=THE SYMBOL )(.*)(?= WAS NOT USED)'),
@@ -26,7 +26,10 @@ def parse_jes_output(spool):
             found_errors.remove('')
         if len(found_errors) > 0:
             for error in found_errors:
-                output_message += message.format(*error) + '\n'
+                if(type(error) == str):
+                    output_message += message.format(error) + '\n'
+                else:
+                    output_message += message.format(*error) + '\n'
     return output_message
 
 try:
