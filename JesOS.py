@@ -15,8 +15,9 @@ def parse_jes_output(spool):
         ('SQLCODE -206 (probably forgot \':\' in sql query) {}',             '(?<=DSN2 BIND SQL ERROR)[\s\S]*(?<=SQLCODE=-206)[\s\S]*TOKENS=(\S*)'),
         ('Invalid comparison of {} to {}',                                   '"(.*)" was compared with "(.*)"'),
         ('{} was used in a arithmetic statement but is {}',                  '"(\S+) \((\S+)\)" was not numeric, but was a sender in an arithmetic expression'),
-        ('SQLCODE -811 (SELECT statement recieved more than one records)',    '\*\*SQL RETURN CODE =        -811'),
-        ('SQLCODE -991 (MOVE "UTLWKRRS" TO UTLWKSTG)',                       '\*\*SQL RETURN CODE =        -991')
+        ('SQLCODE -811 (SELECT statement recieved more than one records)',   '\*\*SQL RETURN CODE =        -811'),
+        ('SQLCODE -991 (MOVE "UTLWKRRS" TO UTLWKSTG)',                       '\*\*SQL RETURN CODE =        -991'),
+        ('SQLCODE -805 (SELECT returned multiple rows without cursor)',      '\*\*SQL RETURN CODE =        -991'),
         ]
 
     for message, regex in error_regex:
